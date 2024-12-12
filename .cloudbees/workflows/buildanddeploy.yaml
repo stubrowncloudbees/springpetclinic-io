@@ -203,7 +203,7 @@ jobs:
     needs: 
       - evidence-collection
   exit_gate:
-    environment: snaqvi_DEV
+    environment: change-me_DEV  #This will be changed to SE's created DEV environment ex: tjohns_DEV
     steps:
       - uses: cloudbees-io/publish-evidence-item@v1
         name: Publish Results
