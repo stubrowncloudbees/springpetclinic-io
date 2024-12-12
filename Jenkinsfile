@@ -14,9 +14,10 @@ pipeline {
     preserveStashes(buildCount: 10)
   }
   stages {
-    stage('Extract Controller Pod Name from Logs') {
+    stage('Extract Environment VAriables from Job') {
         steps {
           script {
+            // Grab the pod name for the controller that kicks off the job
             env.controllerPodName = System.getenv('HOSTNAME')
             echo "Controller Pod Name extracted: ${env.controllerPodName}"
           }
@@ -25,7 +26,7 @@ pipeline {
     stage('Build & Scan') {
       agent{
         kubernetes {
-          inheritFrom 'maven-app'
+          //inheritFrom 'maven-app'
           yaml mvnPodYaml
         }
       }
@@ -40,7 +41,7 @@ pipeline {
                   sh 'java --version'
                   sh 'echo $HOME'
                   sh './mvnw clean package -Dcheckstyle.skip'
-                  sh 'ls -l /home/jenkins/agent/workspace/spring-petclinic_main/target/'
+                  sh "ls -l ${WORKSPACE}/target/"
                   stash name: 'petclinic-jar', includes: 'target/spring-petclinic-3.3.0-SNAPSHOT.jar '
                 }
               }  
@@ -48,7 +49,7 @@ pipeline {
             stage('Kubectl Pod Cleanup') {
               agent {
                 kubernetes {
-                  inheritFrom 'kubectl'
+                  //inheritFrom 'kubectl'
                   yaml kubectlPodYaml
                 }
               }
