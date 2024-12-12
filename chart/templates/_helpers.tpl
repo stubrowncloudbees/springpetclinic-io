@@ -60,3 +60,11 @@ Create the name of the service account to use
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
 {{- end }}
+
+{{/*
+Add hours to the future
+*/}}
+{{- define "addHours" -}}
+{{- $hours := mul (int .) 3600 -}}
+{{- now | unixEpoch | add $hours | date "2006-01-02T15:04:05Z" -}}
+{{- end -}}

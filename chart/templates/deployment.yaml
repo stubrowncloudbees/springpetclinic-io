@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: {{ .Release.Name }}
   annotations:
-    cloudbees/expiry: {{ now | date "2006-01-02T15:04:05Z" }}
+    cloudbees/expiry: {{ template "addHours" 24 }}
   labels:
     app: {{ .Release.Name }}
 spec:
